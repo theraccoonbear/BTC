@@ -12,6 +12,7 @@ select(STDIN); $| = 1;
 select(STDERR); $| = 1;
 select($previous_fh);
 
+my $home = `echo ~`;
 $ENV{TMPDIR} = "$home/tmp";
 
 my $cache = new File::Cache({namespace  => 'BTC',
