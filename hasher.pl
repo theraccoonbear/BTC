@@ -84,9 +84,9 @@ sub findNonce {
 		my $elap = floor(gettimeofday() - $now);
 		if ($verbose) {
 			print "$cksum > $difficulty = " . ($cksum > $difficulty ? 'YES' : 'NO') ."\n";
-		} elsif ($tick && ($elap > $last_sec + 1)) {
+		} elsif ($tick && ($elap >= $last_sec + 1)) {
 			print '.';
-			if (!($elap % 10)) {
+			if ($elap != 0 && !($elap % 10)) {
 				print $elap . " seconds\n";
 			}
 			
