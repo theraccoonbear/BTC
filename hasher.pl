@@ -22,11 +22,12 @@ my $hash = 'md5';
 my $pad_length = 32;
 
 GetOptions (
-						"difficulty=s" => \$difficulty,
-						"data=s"   => \$data,
-						'verbose' => \$verbose,
-						'tick' => \$tick,
-						'hash=s', \$hash);
+	"difficulty=s" => \$difficulty,
+	"data=s"   => \$data,
+	'verbose' => \$verbose,
+	'tick' => \$tick,
+	'hash=s', \$hash
+);
 
 
 if ($hash eq 'md5') {
