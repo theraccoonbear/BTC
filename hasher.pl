@@ -18,7 +18,6 @@ my $difficulty = -1;
 my $verbose = 0;
 my $tick = 0;
 my $data = 'hello, world!';
-my $method = 'leading';
 my $hash = 'md5';
 my $pad_length = 32;
 
@@ -27,8 +26,7 @@ GetOptions (
 						"data=s"   => \$data,
 						'verbose' => \$verbose,
 						'tick' => \$tick,
-						'hash=s', \$hash,
-						'method=s' => $method);
+						'hash=s', \$hash);
 
 
 if ($hash eq 'md5') {
@@ -106,9 +104,6 @@ sub findNonce {
 		elapsed => $done - $now
 	};
 } # findNonce()
-
-#print getHash("X", 'sha256') . "\n"; exit(0);
-
 
 my $result = findNonce($data, $difficulty);
 print "\n\n";
