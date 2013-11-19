@@ -73,10 +73,6 @@ sub findNonce {
 	my $now = gettimeofday();
 	my $last_sec = -1;
 	
-	#if ($tick) {
-	#	print '.';
-	#}
-	
 	do {
 		$cksum = getHash($data . $nonce, $hash); 
 		$nonce++;
