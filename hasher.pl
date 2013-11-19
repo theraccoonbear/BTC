@@ -22,7 +22,8 @@ my $method = 'leading';
 my $hash = 'md5';
 my $pad_length = 32;
 
-GetOptions ("difficulty=s" => \$difficulty,
+GetOptions (
+						"difficulty=s" => \$difficulty,
 						"data=s"   => \$data,
 						'verbose' => \$verbose,
 						'tick' => \$tick,
