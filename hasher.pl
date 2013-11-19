@@ -6,9 +6,18 @@ use Digest::MD5 qw(md5 md5_hex);
 use Digest::SHA1 qw(sha1);
 use Digest::SHA qw(sha256);
 use Getopt::Long;
-use Time::HiRes qw(gettimeofday tv_interval);
+use Time::HiRes qw(gettimeofday);
 use bigint;
 use POSIX;
+
+# This is a simple hashing script
+#
+# It is not a BTC miner, it's a very simple
+# implementation of the ideas used in BTC
+# transaction processing/mining.
+#
+# This is just a simple tool to help illustrate
+# how hash difficulty works.
 
 my $previous_fh = select(STDOUT);
 $| = 1;
@@ -47,6 +56,19 @@ if ($difficulty < 1) {
 
 $difficulty = ('9' x ($pad_length - $difficulty)) * 1;
 
+sub hrf {
+	my $num = shift @_;
+	my @sizes=('', 'K', 'M', 'G', 'T', 'P');
+  my $i = 0;
+
+  while ($num > 1024)
+  {
+    $num = $num / 1024;
+    $i++;
+  }
+  return sprintf("%.0f $sizes[$i]", $num);
+} # hrf()
+
 sub getHash {
 	my $data = shift @_;
 	my $hash = shift @_ || 'md5';
@@ -71,9 +93,10 @@ sub findNonce {
 	my $cksum = 0;
 	my $cnt = 0;
 	my $now = gettimeofday();
-	my $last_sec = -1;
+	my $last_sec = 0;
 	
 	do {
+		$cnt++;
 		$cksum = getHash($data . $nonce, $hash); 
 		$nonce++;
 		my $elap = floor(gettimeofday() - $now);
@@ -82,12 +105,13 @@ sub findNonce {
 		} elsif ($tick && ($elap >= $last_sec + 1)) {
 			print '.';
 			if ($elap != 0 && !($elap % 10)) {
-				print $elap . " seconds\n";
+				my $hash_rate = hrf($cnt / $elap);
+				print $elap . " seconds ($cnt hashes tested; " . $hash_rate . "H/s)\n";
 			}
 			
 			$last_sec = $last_sec + 1;
 		}
-		$cnt++;
+		
 	} while ($cksum > $difficulty);
 	my $done = gettimeofday();
 	
