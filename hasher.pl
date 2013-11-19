@@ -21,38 +21,38 @@ use POSIX;
 
 # Sample Output:
 #
-#		$ ./hasher.pl --data "Xmy test data" --tick --hash sha256 --difficulty 12
-#		..........10 seconds (52067 hashes tested; 5 MH/s)
-#		..........20 seconds (104105 hashes tested; 5 MH/s)
-#		..........30 seconds (155522 hashes tested; 5 MH/s)
-#		..........40 seconds (206747 hashes tested; 5 MH/s)
-#		..........50 seconds (257908 hashes tested; 5 MH/s)
-#		..........60 seconds (309090 hashes tested; 5 MH/s)
-#		..........70 seconds (361264 hashes tested; 5 MH/s)
-#		..........80 seconds (413432 hashes tested; 5 MH/s)
-#		..........90 seconds (465044 hashes tested; 5 MH/s)
-#		..........100 seconds (517306 hashes tested; 5 MH/s)
-#		..........110 seconds (569621 hashes tested; 5 MH/s)
-#		..........120 seconds (621909 hashes tested; 5 MH/s)
-#		..........130 seconds (674173 hashes tested; 5 MH/s)
-#		..........140 seconds (726542 hashes tested; 5 MH/s)
-#		..........150 seconds (778885 hashes tested; 5 MH/s)
-#		..........160 seconds (831158 hashes tested; 5 MH/s)
-#		..........170 seconds (883491 hashes tested; 5 MH/s)
-#		..........180 seconds (935765 hashes tested; 5 MH/s)
-#		..........190 seconds (987982 hashes tested; 5 MH/s)
-#		..........200 seconds (1040169 hashes tested; 5 MH/s)
-#		..
-#		
-#		$VAR1 = {
-#							'hash' => 'sha256',
-#							'difficulty' => '00000000000099999999999999999999999999999999999999999999999999999999999999999999',
-#							'__checksum' => '00000000000044859553546166089426248694455243727540602698974690741819993069296615',
-#							'nonce' => '1052971',
-#							'data' => 'Xmy test data',
-#							'attempts' => '1052971',
-#							'elapsed' => '202.446646928787'
-#						};
+# $ ./hasher.pl --data "Xmy test data" --tick --hash sha256 --difficulty 12
+# ..........10 seconds (52067 hashes tested; 5 KH/s)
+# ..........20 seconds (104105 hashes tested; 5 KH/s)
+# ..........30 seconds (155522 hashes tested; 5 KH/s)
+# ..........40 seconds (206747 hashes tested; 5 KH/s)
+# ..........50 seconds (257908 hashes tested; 5 KH/s)
+# ..........60 seconds (309090 hashes tested; 5 KH/s)
+# ..........70 seconds (361264 hashes tested; 5 KH/s)
+# ..........80 seconds (413432 hashes tested; 5 KH/s)
+# ..........90 seconds (465044 hashes tested; 5 KH/s)
+# ..........100 seconds (517306 hashes tested; 5 KH/s)
+# ..........110 seconds (569621 hashes tested; 5 KH/s)
+# ..........120 seconds (621909 hashes tested; 5 KH/s)
+# ..........130 seconds (674173 hashes tested; 5 KH/s)
+# ..........140 seconds (726542 hashes tested; 5 KH/s)
+# ..........150 seconds (778885 hashes tested; 5 KH/s)
+# ..........160 seconds (831158 hashes tested; 5 KH/s)
+# ..........170 seconds (883491 hashes tested; 5 KH/s)
+# ..........180 seconds (935765 hashes tested; 5 KH/s)
+# ..........190 seconds (987982 hashes tested; 5 KH/s)
+# ..........200 seconds (1040169 hashes tested; 5 KH/s)
+# ..
+# 
+# $VAR1 = {
+#           'hash' => 'sha256',
+#           'difficulty' => '00000000000099999999999999999999999999999999999999999999999999999999999999999999',
+#           '__checksum' => '00000000000044859553546166089426248694455243727540602698974690741819993069296615',
+#           'nonce' => '1052971',
+#           'data' => 'Xmy test data',
+#           'attempts' => '1052971',
+#           'elapsed' => '202.446646928787'
+#         };
 
 
 
