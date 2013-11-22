@@ -5,12 +5,14 @@ use Digest::MD5 qw(md5);
 use Digest::SHA1 qw(sha1);
 use Digest::SHA qw(sha256);
 use Time::HiRes qw(gettimeofday);
-use bigint;
-
+#use bigint;
 
 has 'difficulty' => (
 	is => 'rw',
-	isa => 'Num'
+	isa => 'Num',
+	default => sub {
+	  return 1;
+	}
 );
 
 has 'hash' => (
@@ -24,11 +26,21 @@ sub getTarget {
 	
 	if ($self->difficulty < 1) {
 		$self->difficulty(1);
-	} elsif ($self->difficulty > $self->getPadLength()) {
-		$self->difficulty($self->getPadLength());
+	} elsif ($self->difficulty > 100) { #$self->getPadLength()) {
+		$self->difficulty(100); #$self->getPadLength());
 	}
 	
-	return ('9' x ($self->getPadLength - $self->difficulty)) * 1;
+	my $maximum = ('9' x ($self->getPadLength - $self->difficulty)) * 1;
+	my $percent = ((100 - $self->difficulty) / 100);
+	my $targ = $maximum * $percent;
+	#print "Diff: " . $self->difficulty . "\n";
+	#print "Max: $maximum\n";
+	##print "Max: " . ($maximum / 3) . "\n";
+	#print "Percent: $percent%\n";
+	#print "New Target: $targ\n";
+	#exit(0);
+	return $targ;
+	#return ('9' x ($self->getPadLength - $self->difficulty)) * 1;
 }
 
 
@@ -46,7 +58,7 @@ sub getHash {
 		$returned = md5($data);
 	}
 	my @ints = unpack('N*', $returned);
-	return join('', @ints) * 1;
+	return join('', @ints);# * 1;
 } # getHash()
 
 sub getPadLength {

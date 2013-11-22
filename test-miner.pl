@@ -41,8 +41,9 @@ sub getName {
 } # getName()
 
 sub getTranBlock {
-
-	my @block = ();
+	my $prev = shift @_;
+	
+	my $block = Finance::BTC::Block->new();
 	
 	foreach (3..floor(rand() * 15) + 3) {
 		my $sender = getName();
@@ -52,13 +53,15 @@ sub getTranBlock {
 		my $tran = Finance::BTC::Transaction->new(
 			sender => $sender,
 			recipient => $recip,
-			amount => $amount
+			amount => $amount,
+			previous => $prev
 		);
 		
-		push @block, $tran->json();
+		$block->addTransaction($tran);
 	}
 	
-	return @block;
+	return $block;
+	#return @block;
 } # getTranBlock()
 
 
@@ -69,32 +72,58 @@ my $last_hash = '0' x 40;
 my @mvng_avg = ();
 
 my $since_last = 0;
+my $block_cnt = 0;
+my $since_last_adj = 0;
 
 do {
-	my @block = getTranBlock();
-	my $block_str = $last_hash . join(",", @block);
-
-	my $block = $miner->findNonce($block_str);
-	#print Dumper($block);
-	$last_hash = $block->{__checksum};
+	my $block = getTranBlock($last_hash);
+	my $rslt = $miner->findNonce($block->json);
+	$block->hash($rslt->{__checksum});
+	$block->elapsed($rslt->{elapsed});
+	$last_hash = $block->hash;
+  
+	$block_cnt++;
+	$since_last_adj++;
 	
 	push @mvng_avg, $block->{elapsed} * 1;
-	if (@mvng_avg >= 10) {
-		shift @mvng_avg;
-
-		my $avg = sum(@mvng_avg)/@mvng_avg;
-		
-		if ($avg < $target_seconds - 1) {
-			print "Too fast ($avg not $target_seconds).\nChanged difficulty from " . $miner->difficulty . " to ";
-			$miner->difficulty($miner->difficulty + 1);
-			print $miner->difficulty . "\n";
-		} elsif ($avg > $target_seconds + 1) {
-			print "Too slow ($avg not $target_seconds).\nChanged difficulty from " . $miner->difficulty . " to ";
-			$miner->difficulty($miner->difficulty - 1);
-			print $miner->difficulty . "\n";
-		}
+	my $to_use = ceil($block_cnt * .1);
+	if ($to_use > 100) {
+	  $to_use = 100;
 	}
 	
+	print "Window size: $to_use\n";
+	
+	if (@mvng_avg >= $to_use + 1) {
+	  shift @mvng_avg;
+	}
+	
+	
+	
+	print "$block_cnt block(s) processed.  Last in $rslt->{elapsed}.\n";
+	
+	#if ($since_last_adj >= 3) {
+	  my $avg = sum(@mvng_avg)/@mvng_avg;
+	  #$avg = $avg + $rslt->{elapsed} / 2;
+	  
+	  my $diff = abs($target_seconds - $avg) / $target_seconds;
+	  $diff *= .8;
+	#  if ($diff > .1) {
+	#	$diff = .1;
+	#  }
+	  
+	  #if ($diff > .1) {
+		$since_last_adj = 0;
+		if ($avg < $target_seconds) {
+			print "Too fast ($avg not $target_seconds).\nChanged difficulty from " . $miner->difficulty . " to ";
+			$miner->difficulty($miner->difficulty + $diff);
+			print $miner->difficulty . "\n";
+		} elsif ($avg > $target_seconds) {
+			print "Too slow ($avg not $target_seconds).\nChanged difficulty from " . $miner->difficulty . " to ";
+			$miner->difficulty($miner->difficulty - $diff);
+			print $miner->difficulty . ' (' . $miner->getTarget() . ")\n";
+		}
+	  #}
+	#}
 	
 } while (1);
 

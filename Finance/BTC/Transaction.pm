@@ -49,7 +49,9 @@ sub basic {
 		amount => $self->amount,
 		timestamp => $self->timestamp,
 		guid => $self->id
-	}
+	};
+	
+	return $bhr;
 }
 
 sub json {
