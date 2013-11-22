@@ -122,6 +122,7 @@ sub getHash {
 	return join('', @ints) * 1;
 } # getHash()
 
+
 sub findNonce {
 	my $data = shift @_;
 	my $difficulty = shift @_;
