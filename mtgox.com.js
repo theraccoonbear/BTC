@@ -48,7 +48,7 @@ $(function() {
 		$dataList = $myData.find('dl');
 		
 		$lag = newMetricEntry('lag', 'Trading Lag');
-		$spread = newMetricEntry('spread', 'Bid/Ask Spread');
+		//$spread = newMetricEntry('spread', 'Bid/Ask Spread');
 		
 		
 		$('nav.mainNav').after($myData);
@@ -130,11 +130,11 @@ $(function() {
 				delta_val = Math.abs(delta_val);
 				percent = Math.abs(percent);
 				
-				var spreadDiff = Math.abs($curSell.val() - $curBuy.val());
-				var spreadPercent = spreadDiff / $curSell.val() * 100;
-				var spreadMsg = '$' + spreadDiff.toFixed(2) + ', ' + spreadPercent.toFixed(2) + '%';
-				console.log(spreadMsg);
-				$spread.html(spreadMsg);
+				//var spreadDiff = Math.abs($curSell.val() - $curBuy.val());
+				//var spreadPercent = spreadDiff / $curSell.val() * 100;
+				//var spreadMsg = '$' + spreadDiff.toFixed(2) + ', ' + spreadPercent.toFixed(2) + '%';
+				//console.log(spreadMsg);
+				//$spread.html(spreadMsg);
 				
 				
 				if (console && typeof console.log === 'function') {

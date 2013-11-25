@@ -46,8 +46,8 @@ sub getTranBlock {
 	
 	my $block = Finance::BTC::Block->new();
 	
-	my $min_trans = 1;
-	my $max_trans = 1;
+	my $min_trans = 3;
+	my $max_trans = 10;
 	
 	foreach ($min_trans..floor(rand() * $max_trans - $min_trans + 1) + $min_trans) {
 		my $sender = getName();
@@ -137,7 +137,7 @@ do {
 #  }
   
   
-} while ($block_cnt < 10 && $continue);
+} while (1 || $block_cnt < 10 && $continue);
 
 foreach my $b (@block_chain) {
   print "Block: " . $b->id . ' ' . ($b->checkNonce ? 'VALID' : 'INVALID') . "\n";
