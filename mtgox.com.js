@@ -8,28 +8,6 @@ $(function() {
 	var $lag;
 	var $spread;
 	
-	var polling = {
-		interval: null,
-		
-		start: function() {
-			console.log("Polling started");
-			polling.interval = setInterval(polling.poll, 10000);
-			polling.poll();
-		},
-		
-		stop: function() {
-			console.log("Polling stopped");
-			clearInterval(polling.interval);
-		},
-		
-		poll: function() {
-			$.getJSON('https://mtgox.com/api/1/generic/order/lag', function(data) {
-				if (data.result && data.result === 'success') {
-					$lag.html(data['return']['lag_secs']);
-				}
-			});
-		}
-	};
 	
 	
 	var newMetricEntry = function(id, label) {
@@ -41,6 +19,73 @@ $(function() {
 	
 	
 	if (logged_in) {
+		var cachedVals = {
+			sell: -Math.random()
+		};
+		
+		var autoPoll = function(o) {
+			var ctxt = this;
+			this.url = o.url;
+			this.callback = o.callback;
+			this.interval = o.interval;
+			this.active = false;
+			if (typeof this.interval === 'undefined') {
+				this.interval = 10000;
+			}
+			
+			this.pollAction = function() {
+				if (ctxt.active) {
+					return;
+				}
+				ctxt.active = true;
+				$.getJSON(ctxt.url, function(d) {
+					ctxt.active = false;
+					ctxt.callback(d)
+				});
+			};
+			
+			this.intTime = setInterval(this.pollAction, this.interval);
+			this.pollAction();
+		};
+		
+		
+		var goxPoll = new autoPoll({
+			url: 'http://data.mtgox.com/api/2/BTCUSD/money/ticker',
+			interval: 10000,
+			callback: function(data) {
+				if (data.result && data.result === 'success') {
+					cachedVals.sell = parseFloat(data.data.sell.value);
+				}
+			}
+		});
+		
+		var polling = {
+			interval: null,
+			
+			start: function() {
+				console.log("Polling started");
+				polling.interval = setInterval(polling.poll, 10000);
+				polling.poll();
+			},
+			
+			stop: function() {
+				console.log("Polling stopped");
+				clearInterval(polling.interval);
+			},
+			
+			poll: function() {
+				$.getJSON('https://mtgox.com/api/1/generic/order/lag', function(data) {
+					if (data.result && data.result === 'success') {
+						$lag.html(data['return']['lag_secs']);
+					}
+				});
+			}
+		};
+		
+		
+		
+		////////
+		
 		$walletBar.prepend('<li id="currentValue"><strong>$0.00</strong></li>').prepend('<li>Value of my BTC:</li>');
 		
 		$myData = $('<div class="line" id="myData"><dl></dl></div>');
@@ -69,7 +114,7 @@ $(function() {
 		var old_usd_val = 0;
 		
 		var coinValue = function() {	
-			return parseFloat(($curSell.length < 1 ? $curExch.html() : $curSell.val()).replace(/[^0-9.]/, ''));
+			return cachedVals.sell;
 		};
 		
 		var valueOf = function(btc) {
