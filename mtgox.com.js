@@ -50,7 +50,7 @@ $(function() {
 		
 		
 		var goxPoll = new autoPoll({
-			url: 'http://data.mtgox.com/api/2/BTCUSD/money/ticker',
+			url: 'https://data.mtgox.com/api/2/BTCUSD/money/ticker',
 			interval: 10000,
 			callback: function(data) {
 				if (data.result && data.result === 'success') {
@@ -122,7 +122,7 @@ $(function() {
 		};
 		
 		var myBTCBalance = function() {
-			return parseFloat($btcBal.html().replace(/[^0-9.]/, ''));
+			return parseFloat($btcBal.html().replace(/[^0-9.]/g, ''));
 		};
 		
 		var myValue = function() {
@@ -130,19 +130,21 @@ $(function() {
 		}
 		
 		var cashOnHand = function() {
-			return parseFloat($cashOnHand.html().replace(/[^0-9.]/, ''));
+			var cleanAmt = $cashOnHand.html();
+			cleanAmt = cleanAmt.replace(/[^0-9.]/g, '');
+			return parseFloat(cleanAmt);
 		};
 		
 		var getWorth = function() {
 			var exch = parseFloat($curExch.html().replace(/[^0-9.]/, ''));
-			var bal = parseFloat($btcBal.html().replace(/[^0-9.]/, ''));
+			var bal = parseFloat($btcBal.html().replace(/[^0-9.]/g, ''));
 			var w = parseFloat(exch * bal)
 			
 			return w;
 		};
 		
 		var getLastWorth = function() {
-			var w = parseFloat($curVal.html().replace(/[^0-9.]/, ''));
+			var w = parseFloat($curVal.html().replace(/[^0-9.]/g, ''));
 			return w;
 		};
 		
