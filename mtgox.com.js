@@ -122,7 +122,7 @@ $(function() {
 		};
 		
 		var myBTCBalance = function() {
-			return 5.56;
+			return 5.60;
 			return parseFloat($btcBal.html().replace(/[^0-9.]/, ''));
 		};
 		
